@@ -4,6 +4,7 @@
   "description": "Minimalisic hapi server which implements a simple route to collect user-information for a pre-release",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
