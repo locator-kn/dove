@@ -12,7 +12,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "fs-extra": "^0.19.0",
     "hapi": "^8.6.1",
-    "joi": "^6.4.3"
+    "joi": "^6.4.3",
+    "lodash": "^3.9.3"
   }
 }
