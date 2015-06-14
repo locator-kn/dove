@@ -1,6 +1,9 @@
 var Hapi = require('hapi');
 var joi = require('joi');
 
+var utils = require('./lib/utils');
+
+
 var server = new Hapi.Server();
 server.connection({port: 3030});
 
@@ -15,7 +18,7 @@ server.route({
     path: '/register',
     config: {
         handler: function (request, reply) {
-            reply('success');
+            reply(utils.addUser(request.payload));
         },
         validate: {
             payload: schema
