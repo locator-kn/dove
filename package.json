@@ -10,5 +10,8 @@
     "ark"
   ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^8.6.1"
+  }
 }
