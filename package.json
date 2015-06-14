@@ -1,0 +1,14 @@
+{
+  "name": "dove",
+  "version": "0.1.0",
+  "description": "Minimalisic hapi server which implements a simple route to collect user-information for a pre-release",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ark"
+  ],
+  "author": "",
+  "license": "ISC"
+}
