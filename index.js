@@ -2,6 +2,7 @@ var Hapi = require('hapi');
 var joi = require('joi');
 
 var utils = require('./lib/utils');
+var mail = require('./lib/mail')(require('./env.json'));
 
 
 var server = new Hapi.Server();
@@ -25,7 +26,13 @@ server.route({
     path: '/mail/register',
     config: {
         handler: function (request, reply) {
-            reply(utils.addUser(request.payload));
+            utils.addUser(request.payload).then(function() {
+                mail.sendWelcomeMail(request.payload, function (err, data) {
+                    console.log(err, data);
+                    reply({message: 'thank you'});
+                });
+
+            }).catch(reply);
         },
         validate: {
             payload: schemaUser
