@@ -8,7 +8,7 @@ var server = new Hapi.Server();
 server.connection({port: 3030});
 
 var schemaUser = joi.object().keys({
-    name: joi.string().alphanum().min(3).max(30).required(),
+    name: joi.string().min(3).max(30).required(),
     mail: joi.string().email().required()
 });
 
