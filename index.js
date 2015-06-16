@@ -59,7 +59,7 @@ server.route({
     config: {
         handler: function (request, reply) {
             utils.removeUser(request.params.mail).catch(function(err) {
-                console.log('Unsubscribe user failed', request.params.mail, err);
+                    console.log('Unsubscribe user failed', request.params.mail, err);
                 return;
             });
             reply.redirect('http://project.locator-app.com/unsubscribe.html')
