@@ -26,7 +26,7 @@ server.route({
     path: '/mail/register',
     config: {
         handler: function (request, reply) {
-            utils.addUser(request.payload).then(function() {
+            utils.addUser(request.payload).then(function () {
                 mail.sendWelcomeMail(request.payload, function (err, data) {
                     console.log(err, data);
                     reply({message: 'thank you'});
@@ -49,6 +49,25 @@ server.route({
         },
         validate: {
             payload: schemaFeedback
+        }
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/mail/unsubscribe/{mail}',
+    config: {
+        handler: function (request, reply) {
+            utils.removeUser(request.params.mail).catch(function(err) {
+                console.log('Unsubscribe user failed', request.params.mail, err);
+                return;
+            });
+            reply.redirect('http://localhost:9000/unsubscribe.html')
+        },
+        validate: {
+            params: {
+                mail: joi.string().email().required()
+            }
         }
     }
 });
