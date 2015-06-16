@@ -62,7 +62,7 @@ server.route({
                 console.log('Unsubscribe user failed', request.params.mail, err);
                 return;
             });
-            reply.redirect('http://localhost:9000/unsubscribe.html')
+            reply.redirect('http://project.locator-app.com/unsubscribe.html')
         },
         validate: {
             params: {
