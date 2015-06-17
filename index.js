@@ -26,6 +26,7 @@ server.route({
     path: '/mail/register',
     config: {
         handler: function (request, reply) {
+            request.mail = request.mail.toLowerCase();
             utils.addUser(request.payload).then(function () {
                 mail.sendWelcomeMail(request.payload, function (err, data) {
                     console.log(err, data);
@@ -45,6 +46,7 @@ server.route({
     path: '/mail/feedback',
     config: {
         handler: function (request, reply) {
+            request.mail = request.mail.toLowerCase();
             reply(utils.addFeedback(request.payload));
         },
         validate: {
@@ -58,7 +60,7 @@ server.route({
     path: '/mail/unsubscribe/{mail}',
     config: {
         handler: function (request, reply) {
-            utils.removeUser(request.params.mail).catch(function(err) {
+            utils.removeUser(request.params.mail.toLowerCase()).catch(function(err) {
                     console.log('Unsubscribe user failed', request.params.mail, err);
                 return;
             });
