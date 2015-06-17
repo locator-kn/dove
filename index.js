@@ -84,11 +84,11 @@ server.start(function () {
 
 function sendSlackNotification(user) {
     var userString = '';
-    
+
     if (!user.message) {
         userString = 'New user registered: Name: ' + user.name + ', Mail: ' + user.mail;
     } else {
-        userString = 'New Feedback from ' + user.name + ' ' + user.mail + ': ' + user.subject + ' ' + user.message;
+        userString = 'New Feedback from ' + user.name + ' ' + user.mail + ': Subject: ' + user.subject + ', Message: ' + user.message;
     }
 
     var headers = {
