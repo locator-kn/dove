@@ -50,7 +50,7 @@ server.route({
     path: '/mail/feedback',
     config: {
         handler: function (request, reply) {
-            request.mail = request.mail.toLowerCase();
+            request.payload.mail = request.payload.mail.toLowerCase();
             reply(utils.addFeedback(request.payload));
         },
         validate: {
