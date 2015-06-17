@@ -29,13 +29,13 @@ server.route({
         handler: function (request, reply) {
             request.payload.mail = request.payload.mail.toLowerCase();
             utils.addUser(request.payload).then(function () {
-                // mail.sendWelcomeMail(request.payload, function (err, data) {
-                // console.log(err, data);
-                reply({message: 'thank you'});
-                console.log('send slack')
+                mail.sendWelcomeMail(request.payload, function (err, data) {
+                    console.log(err, data);
+                    reply({message: 'thank you'});
+                    console.log('send slack')
 
-                sendSlackNotification(request.payload);
-                //  });
+                    sendSlackNotification(request.payload);
+                });
 
             }).catch(reply);
         },
