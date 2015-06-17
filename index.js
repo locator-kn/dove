@@ -1,3 +1,4 @@
+'use strict';
 var Hapi = require('hapi');
 var joi = require('joi');
 var http = require('https');
@@ -32,7 +33,7 @@ server.route({
                 mail.sendWelcomeMail(request.payload, function (err, data) {
                     console.log(err, data);
                     reply({message: 'thank you'});
-                    console.log('send slack')
+                    console.log('send slack');
 
                     sendSlackNotification(request.payload);
                 });
@@ -66,9 +67,8 @@ server.route({
         handler: function (request, reply) {
             utils.removeUser(request.params.mail.toLowerCase()).catch(function (err) {
                 console.log('Unsubscribe user failed', request.params.mail, err);
-                return;
             });
-            reply.redirect('http://project.locator-app.com/unsubscribe.html')
+            reply.redirect('http://project.locator-app.com/unsubscribe.html');
         },
         validate: {
             params: {
@@ -114,7 +114,7 @@ function sendSlackNotification(user) {
     });
 
     request.on('error', function (e) {
-        console.log('Error while sending slackbot notification: ', e)
+        console.log('Error while sending slackbot notification: ', e);
     });
 
     request.write(userString);
