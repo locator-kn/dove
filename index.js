@@ -32,7 +32,6 @@ server.route({
                 mail.sendWelcomeMail(request.payload, function (err, data) {
                     console.log(err, data);
                     reply({message: 'thank you'});
-                    console.log('send slack')
 
                     sendSlackNotification(request.payload);
                 });
@@ -52,6 +51,7 @@ server.route({
         handler: function (request, reply) {
             request.payload.mail = request.payload.mail.toLowerCase();
             reply(utils.addFeedback(request.payload));
+            sendSlackNotification(request.payload);
         },
         validate: {
             payload: schemaFeedback
@@ -83,8 +83,13 @@ server.start(function () {
 });
 
 function sendSlackNotification(user) {
-
-    var userString = 'New user registered: Name: ' + user.name + ', Mail: ' + user.mail;
+    var userString = '';
+    
+    if (!user.message) {
+        userString = 'New user registered: Name: ' + user.name + ', Mail: ' + user.mail;
+    } else {
+        userString = 'New Feedback from ' + user.name + ' ' + user.mail + ': ' + user.subject + ' ' + user.message;
+    }
 
     var headers = {
         'Content-Type': 'application/text',
