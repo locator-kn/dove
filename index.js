@@ -51,6 +51,9 @@ server.route({
         handler: function (request, reply) {
             request.payload.mail = request.payload.mail.toLowerCase();
             reply(utils.addFeedback(request.payload));
+
+
+            sendSlackNotification(request.payload);
         },
         validate: {
             payload: schemaFeedback
@@ -82,12 +85,18 @@ server.start(function () {
 });
 
 function sendSlackNotification(user) {
+    var slackNotification = '';
 
-    var userString = 'New user registered: Name: ' + user.name + ', Mail: ' + user.mail;
-
+    if (!user.message) {
+        // registering
+        slackNotification = 'New user registered: Name: ' + user.name + ', Mail: ' + user.mail;
+    } else {
+        // feedback
+        slackNotification = 'New Feedback from ' + user.name + ' ' + user.mail + ': Subject: ' + user.subject + ', Message: ' + user.message;
+    }
     var headers = {
         'Content-Type': 'application/text',
-        'Content-Length': userString.length
+        'Content-Length': slackNotification.length
     };
 
     var options = {
@@ -116,7 +125,7 @@ function sendSlackNotification(user) {
         console.log('Error while sending slackbot notification: ', e)
     });
 
-    request.write(userString);
+    request.write(slackNotification);
     request.end();
 
 
