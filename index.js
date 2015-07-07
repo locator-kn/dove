@@ -33,7 +33,7 @@ server.route({
                     if (err) server.log(['dove', 'register', 'Error'], 'Message sent with error: ' + err);
                     reply({message: 'thank you'});
 
-                    // sendSlackNotification(request.payload);
+                    sendSlackNotification(request.payload);
                 });
 
             }).catch(reply);
