@@ -67,7 +67,7 @@ server.route({
     config: {
         handler: function (request, reply) {
             utils.removeUser(request.params.mail.toLowerCase()).catch(function (err) {
-                server.log(['dove', 'unsubscribe', 'Error'], 'Unsubscribe user failed', request.params.mail, err);
+                server.log(['dove', 'unsubscribe', 'Error'], 'Unsubscribe user failed' + request.params.mail +  err);
                 return;
             });
             reply.redirect('http://project.locator-app.com/unsubscribe.html')
@@ -133,13 +133,13 @@ function sendSlackNotification(user) {
         });
 
         res.on('end', function () {
-            server.log(['dove', 'slack'], 'Response after sending slack notification: ', responseString);
+            server.log(['dove', 'slack'], 'Response after sending slack notification: ' + responseString);
         });
 
     });
 
     request.on('error', function (e) {
-        server.log(['dove', 'slack', 'Error'], 'Error while sending slackbot notification: ', e)
+        server.log(['dove', 'slack', 'Error'], 'Error while sending slackbot notification: ' + e)
     });
 
     request.write(slackNotification);
