@@ -27,6 +27,7 @@ server.route({
     path: '/mail/register',
     config: {
         handler: function (request, reply) {
+            request.log(['dove', 'register'], request.payload);
             request.payload.mail = request.payload.mail.toLowerCase();
             utils.addUser(request.payload).then(function () {
                 mail.sendWelcomeMail(request.payload, function (err, data) {
@@ -44,11 +45,13 @@ server.route({
     }
 });
 
+
 server.route({
     method: 'POST',
     path: '/mail/feedback',
     config: {
         handler: function (request, reply) {
+            request.log(['dove', 'feedback'], request.payload);
             request.payload.mail = request.payload.mail.toLowerCase();
             reply(utils.addFeedback(request.payload));
 
@@ -66,6 +69,7 @@ server.route({
     path: '/mail/unsubscribe/{mail}',
     config: {
         handler: function (request, reply) {
+            request.log(['dove', 'unsubscribe'], request.payload);
             utils.removeUser(request.params.mail.toLowerCase()).catch(function (err) {
                 server.log(['dove', 'unsubscribe', 'Error'], 'Unsubscribe user failed' + request.params.mail + err);
                 return;
