@@ -67,7 +67,7 @@ server.route({
     config: {
         handler: function (request, reply) {
             utils.removeUser(request.params.mail.toLowerCase()).catch(function (err) {
-                server.log(['dove', 'unsubscribe', 'Error'], 'Unsubscribe user failed' + request.params.mail +  err);
+                server.log(['dove', 'unsubscribe', 'Error'], 'Unsubscribe user failed' + request.params.mail + err);
                 return;
             });
             reply.redirect('http://project.locator-app.com/unsubscribe.html')
@@ -83,12 +83,12 @@ server.route({
 var options = {
     reporters: [{
         reporter: require('good-console'),
-        requestHeaders: true,
-        requestPayload: true,
-        responsePayload: true,
         events: {log: '*', response: '*', error: '*', request: '*'}
         // config: '/var/log/locator/locator.log'
-    }]
+    }],
+    requestHeaders: true,
+    requestPayload: true,
+    responsePayload: true
 };
 
 server.register({register: require('good'), options: options}, function (err) {
