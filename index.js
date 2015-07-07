@@ -30,10 +30,10 @@ server.route({
             request.payload.mail = request.payload.mail.toLowerCase();
             utils.addUser(request.payload).then(function () {
                 mail.sendWelcomeMail(request.payload, function (err, data) {
-                    console.log(err, data);
+                    if (err) server.log(['dove', 'register', 'Error'], 'Message sent with error: ' + err);
                     reply({message: 'thank you'});
 
-                    sendSlackNotification(request.payload);
+                    // sendSlackNotification(request.payload);
                 });
 
             }).catch(reply);
@@ -67,7 +67,7 @@ server.route({
     config: {
         handler: function (request, reply) {
             utils.removeUser(request.params.mail.toLowerCase()).catch(function (err) {
-                console.log('Unsubscribe user failed', request.params.mail, err);
+                server.log(['dove', 'unsubscribe', 'Error'], 'Unsubscribe user failed', request.params.mail, err);
                 return;
             });
             reply.redirect('http://project.locator-app.com/unsubscribe.html')
@@ -80,8 +80,25 @@ server.route({
     }
 });
 
+var options = {
+    reporters: [{
+        reporter: require('good-console'),
+        requestHeaders: true,
+        requestPayload: true,
+        responsePayload: true,
+        events: {log: '*', response: '*', error: '*', request: '*'}
+        // config: '/var/log/locator/locator.log'
+    }]
+};
+
+server.register({register: require('good'), options: options}, function (err) {
+
+        if (err) console.error(['dove', 'Error'], 'starting logger' + err);
+    }
+);
+
 server.start(function () {
-    console.log('Server running at:', server.info.uri);
+    server.log(['dove', 'server'], 'Server running at:' + server.info.uri);
 });
 
 function sendSlackNotification(user) {
@@ -116,13 +133,13 @@ function sendSlackNotification(user) {
         });
 
         res.on('end', function () {
-            console.log('Response after sending slack notification: ', responseString);
+            server.log(['dove', 'slack'], 'Response after sending slack notification: ', responseString);
         });
 
     });
 
     request.on('error', function (e) {
-        console.log('Error while sending slackbot notification: ', e)
+        server.log(['dove', 'slack', 'Error'], 'Error while sending slackbot notification: ', e)
     });
 
     request.write(slackNotification);
