@@ -110,7 +110,7 @@ function sendSlackNotification(user) {
 
     if (!user.message) {
         // registering
-        slackNotification = 'New user registered: Name: ' + user.name + ', Mail: ' + user.mail;
+        slackNotification = 'New user registered: Name: ' + user.name + ', Mail: ' + user.mail + '! Nummer: ' + utils.getCount();
     } else {
         // feedback
         slackNotification = 'New Feedback from ' + user.name + ' ' + user.mail + ': Subject: ' + user.subject + ', Message: ' + user.message;
