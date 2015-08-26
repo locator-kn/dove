@@ -15,7 +15,7 @@ var schemaUser = joi.object().keys({
 });
 
 var schemaFeedback = joi.object().keys({
-    name: joi.string().alphanum().min(3).max(30).required(),
+    name: joi.string().min(3).max(30).required(),
     mail: joi.string().email().required(),
     subject: joi.string().required(),
     message: joi.string().required()
