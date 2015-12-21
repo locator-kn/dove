@@ -30,12 +30,13 @@ server.route({
             request.log(['dove', 'register'], request.payload);
             request.payload.mail = request.payload.mail.toLowerCase();
             utils.addUser(request.payload).then(function () {
-                mail.sendWelcomeMail(request.payload, function (err, data) {
+               /* mail.sendWelcomeMail(request.payload, function (err, data) {
                     if (err) server.log(['dove', 'register', 'Error'], 'Message sent with error: ' + err);
                     reply({message: 'thank you'});
 
-                    sendSlackNotification(request.payload);
-                });
+                });*/
+                sendSlackNotification(request.payload);
+
 
             }).catch(reply);
         },
