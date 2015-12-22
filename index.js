@@ -120,8 +120,12 @@ function sendSlackNotification(user) {
 
     slack.webhook({
         text: slackNotification
-    }, function (err, response) {
-        console.log(response);
+    }, function (err) {
+
+        if (err) {
+            console.log('Error sending slack: ', err)
+        }
+        console.log('Successful sent to slack: ', user);
     });
 
 }
