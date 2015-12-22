@@ -10,7 +10,6 @@ var server = new Hapi.Server();
 server.connection({port: 3030});
 
 var schemaUser = joi.object().keys({
-    name: joi.string().min(3).max(30).required(),
     mail: joi.string().email().required()
 });
 
@@ -30,14 +29,12 @@ server.route({
             request.log(['dove', 'register'], request.payload);
             request.payload.mail = request.payload.mail.toLowerCase();
             utils.addUser(request.payload).then(function () {
-               /* mail.sendWelcomeMail(request.payload, function (err, data) {
-                    if (err) server.log(['dove', 'register', 'Error'], 'Message sent with error: ' + err);
-                    reply({message: 'thank you'});
+                /* mail.sendWelcomeMail(request.payload, function (err, data) {
+                 if (err) server.log(['dove', 'register', 'Error'], 'Message sent with error: ' + err);
+                 reply({message: 'thank you'});
 
-                });*/
+                 });*/
                 sendSlackNotification(request.payload);
-
-
             }).catch(reply);
         },
         validate: {
@@ -73,7 +70,6 @@ server.route({
             request.log(['dove', 'unsubscribe'], request.payload);
             utils.removeUser(request.params.mail.toLowerCase()).catch(function (err) {
                 server.log(['dove', 'unsubscribe', 'Error'], 'Unsubscribe user failed' + request.params.mail + err);
-                return;
             });
             reply.redirect('http://project.locator-app.com/unsubscribe.html')
         },
@@ -116,14 +112,18 @@ function sendSlackNotification(user) {
         // feedback
         slackNotification = 'New Feedback from ' + user.name + ' ' + user.mail + ': Subject: ' + user.subject + ', Message: ' + user.message;
     }
+
+
+    var body = JSON.stringify(slackNotification);
+
     var headers = {
-        'Content-Type': 'application/text',
-        'Content-Length': slackNotification.length
+        'Content-Type': 'application/json',
+        'Content-Length': Buffer.byteLength(body)
     };
 
     var options = {
-        host: 'tripl.slack.com',
-        path: '/services/hooks/slackbot?token=emIKR8MDCbIJU6w2XUbz8fG3&channel=%23tracking',
+        host: 'hooks.slack.com',
+        path: '/services/T0C9A8JCC/B0H63BMNK/8gjR0l75vMRD0krFigKSpGvo',
         method: 'POST',
         headers: headers
     };
@@ -147,7 +147,7 @@ function sendSlackNotification(user) {
         server.log(['dove', 'slack', 'Error'], 'Error while sending slackbot notification: ' + e)
     });
 
-    request.write(slackNotification);
+    request.write(body);
     request.end();
 
 
