@@ -1,6 +1,8 @@
 var Hapi = require('hapi');
 var joi = require('joi');
 var http = require('https');
+var Slack = require('slack-node');
+
 
 var utils = require('./lib/utils');
 var mail = require('./lib/mail')(require('./env.json'));
@@ -104,51 +106,22 @@ server.start(function () {
 
 function sendSlackNotification(user) {
     var slackNotification = '';
+    var slack = new Slack();
+
+    slack.setWebhook('https://hooks.slack.com/services/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');
 
     if (!user.message) {
         // registering
-        slackNotification = 'New user registered: Name: ' + user.name + ', Mail: ' + user.mail + '! Nummer: ' + utils.getCount();
+        slackNotification = 'New user registered: Mail: ' + user.mail + '! Nummer: ' + utils.getCount();
     } else {
         // feedback
         slackNotification = 'New Feedback from ' + user.name + ' ' + user.mail + ': Subject: ' + user.subject + ', Message: ' + user.message;
     }
 
-
-    var body = JSON.stringify(slackNotification);
-
-    var headers = {
-        'Content-Type': 'application/json',
-        'Content-Length': Buffer.byteLength(body)
-    };
-
-    var options = {
-        host: 'hooks.slack.com',
-        path: '/services/T0C9A8JCC/B0H63BMNK/8gjR0l75vMRD0krFigKSpGvo',
-        method: 'POST',
-        headers: headers
-    };
-
-    var request = http.request(options, function (res) {
-        res.setEncoding('utf-8');
-
-        var responseString = '';
-
-        res.on('data', function (data) {
-            responseString += data;
-        });
-
-        res.on('end', function () {
-            server.log(['dove', 'slack'], 'Response after sending slack notification: ' + responseString);
-        });
-
+    slack.webhook({
+        text: slackNotification
+    }, function (err, response) {
+        console.log(response);
     });
-
-    request.on('error', function (e) {
-        server.log(['dove', 'slack', 'Error'], 'Error while sending slackbot notification: ' + e)
-    });
-
-    request.write(body);
-    request.end();
-
 
 }
